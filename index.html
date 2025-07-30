@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>1nav</title>
+    <style>
+        :root {
+            --primary-color: #ffd15b;
+            --bg-gray: #f0f2f5;
+            --card-bg: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: "Microsoft Yahei", sans-serif;
+            background: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('/img/bg.jpg') center/cover;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 25px;
+            padding: 25px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #333;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: var(--primary-color);
+        }
+
+        .card-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        @media (max-width: 1024px) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                min-height: auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="grid">
+            <a href="/roles/deepseek-chat.html" class="card">
+                <div>
+                    <div class="card-title">Deepseek</div>
+                    <div class="card-desc">直接与deepseek对话</div>
+                </div>
+            </a>
+            <a href="/roles/summary.html" class="card">
+                <div>
+                    <div class="card-title">文档总结</div>
+                    <div class="card-desc">ai文档总结，省时省力</div>
+                </div>
+            </a>
+            <a href="/roles/solveproblem.html" class="card">
+                <div>
+                    <div class="card-title">AI解题</div>
+                    <div class="card-desc">发送题目，AI导师为你智能讲解</div>
+                </div>
+            </a>
+                        <a href="/roles/hearthealth.html" class="card">
+                <div>
+                    <div class="card-title">心理辅导</div>
+                    <div class="card-desc">有压力很正常，不如倾诉一下吧~</div>
+                </div>
+            </a>
+                        <a href="/settings.html" class="card">
+                <div>
+                    <div class="card-title">设置</div>
+                    <div class="card-desc">Settings</div>
+                </div>
+            </a>
+                        <a href="#" class="card">
+                <div>
+                    <div class="card-title">开发中</div>
+                    <div class="card-desc">app为参赛作品版本，其他功能敬请期待</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+</body>
+</html>

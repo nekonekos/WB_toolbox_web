@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>设置 - DeepSeek助手</title>
+    <style>
+        /* 继承原有变量 */
+        :root {
+            --primary-color: #ffe079;
+            --bg-gray: #F0F0F0;
+            --border-gray: #DCDCDC;
+            --text-dark: #2d3748;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            font-family: "Microsoft Yahei", sans-serif;
+            background: url('/img/bg.jpg') center/cover fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(8px);
+            z-index: -1;
+        }
+
+        .container {
+            width: 760px;
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.93);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            position: relative;
+            height: calc(100vh - 60px);
+        }
+
+        /* 头部 */
+        .settings-header {
+            padding: 20px;
+            background: var(--primary-color);
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* 设置列表 */
+        .settings-list {
+            padding: 24px;
+            overflow-y: auto;
+            height: calc(100% - 120px);
+        }
+
+        .setting-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            margin: 16px 0;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 14px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+
+        .setting-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        .setting-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 16px;
+            opacity: 0.8;
+        }
+
+        .setting-label {
+            flex: 1;
+            font-size: 16px;
+            color: var(--text-dark);
+        }
+
+        /* 开关控件 */
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-track {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.1);
+            border-radius: 14px;
+            transition: all 0.3s;
+        }
+
+        .toggle-thumb {
+            position: absolute;
+            left: 4px;
+            top: 4px;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .toggle-switch.active .toggle-track {
+            background: var(--primary-color);
+        }
+
+        .toggle-switch.active .toggle-thumb {
+            transform: translateX(24px);
+        }
+
+        /* API输入区域 */
+        .api-input-group {
+            margin-top: 16px;
+            display: none;
+            animation: slideDown 0.3s ease;
+        }
+
+        .api-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border-gray);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .api-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .save-btn {
+            margin-top: 12px;
+            padding: 8px 24px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            float: right;
+            transition: opacity 0.3s;
+        }
+
+        .save-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* 提示信息 */
+        .alert-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.85);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            animation: fadeInUp 0.4s ease;
+            display: none;
+        }
+
+        /* 悬浮返回按钮 */
+        .floating-home-btn {
+            position: fixed;
+            right: 30px;
+            bottom: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            backdrop-filter: blur(6px);
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .floating-home-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .floating-home-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--text-dark);
+        }
+
+        /* 动画 */
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="settings-header">
+            <svg class="setting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+            </svg>
+            <div class="settings-title">系统设置</div>
+        </div>
+
+        <div class="settings-list">
+            <!-- 加速模式 -->
+            <div class="setting-item" onclick="toggleAccelerate()">
+                
+                <span class="setting-label">性能加速模式</span>
+                <div class="toggle-switch">
+                    <div class="toggle-track"></div>
+                    <div class="toggle-thumb"></div>
+                </div>
+            </div>
+
+            <!-- 用户登录 -->
+            <div class="setting-item" onclick="showLoginAlert()">
+                <svg class="setting-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12 4a4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4 4 4 0 014-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4z"/>
+                </svg>
+                <span class="setting-label">账户登录</span>
+            </div>
+
+            <!-- API设置 -->
+            <div class="setting-item" onclick="toggleApiInput()">
+                
+                <span class="setting-label">API密钥管理</span>
+                <div class="api-input-group">
+                    <input type="password" class="api-input" placeholder="输入您的API密钥">
+                    <button class="save-btn" onclick="saveApiKey(event)">保存设置</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示信息 -->
+        <div class="alert-toast" id="alert">测试版功能暂未开放</div>
+
+        <!-- 返回按钮 -->
+        <button class="floating-home-btn" onclick="goHome()">
+            <svg viewBox="0 0 24 24">
+                <path fill="currentColor" d="M12 2L2 12h3v8h6v-6h2v6h6v-8h3L12 2z"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        // 加速模式切换
+        function toggleAccelerate() {
+            const toggle = document.querySelector('.toggle-switch');
+            toggle.classList.toggle('active');
+            showToast(toggle.classList.contains('active') ? '加速模式已开启' : '加速模式已关闭');
+        }
+
+        // 显示登录提示
+        function showLoginAlert() {
+            showToast('测试版暂不支持登录功能');
+        }
+
+        // 切换API输入框
+        function toggleApiInput() {
+            const container = document.querySelector('.api-input-group');
+            container.style.display = container.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // 保存API密钥
+        function saveApiKey(e) {
+            e.stopPropagation();
+            const input = document.querySelector('.api-input');
+            if(input.value.trim()) {
+                showToast('API密钥已保存');
+                input.value = '';
+                toggleApiInput();
+            }
+        }
+
+        // 显示提示信息
+        function showToast(message) {
+            const toast = document.getElementById('alert');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 2000);
+        }
+
+        // 返回主页
+        function goHome() {
+            window.location.href = '/';
+        }
+    </script>
+</body>
+</html>
